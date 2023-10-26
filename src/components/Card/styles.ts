@@ -3,8 +3,9 @@ import {View} from 'react-native';
 
 export const Container = styled.View`
   background-color: white;
-  width: 315px;
-  height: 280px;
+  width: 240px;
+  /* width: 180px; */
+  /* height: 100px; */
   border-radius: 14px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
   /* margin-left: 20px; */
@@ -13,7 +14,8 @@ export const Container = styled.View`
 
 export const Cover = styled.View`
   width: 100%;
-  height: 200px;
+  /* height: 130px; */
+  height: 80px;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
   overflow: hidden;

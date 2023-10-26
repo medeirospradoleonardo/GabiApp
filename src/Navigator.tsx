@@ -5,6 +5,13 @@ import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useState} from 'react';
 import Home from './screens/Home';
 
+import Icon from 'react-native-vector-icons/Ionicons';
+
+const mapperRouteIcon = {
+  Home: 'home',
+  Timer: 'alarm',
+};
+
 function Timer() {
   return (
     <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
@@ -21,9 +28,19 @@ function MyTabs() {
   return (
     <Tab.Navigator
       initialRouteName="Home"
-      screenOptions={{
-        tabBarActiveTintColor: '#e91e63',
-      }}>
+      screenOptions={({route}) => ({
+        tabBarIcon: ({focused, color, size}) => {
+          return (
+            <Icon
+              name={mapperRouteIcon[route.name]}
+              size={size}
+              color={color}
+            />
+          );
+        },
+        tabBarActiveTintColor: 'tomato',
+        tabBarInactiveTintColor: 'gray',
+      })}>
       <Tab.Screen
         name="Home"
         children={() => <Home setTabTimer={() => setTabTimer(!tabTimer)} />}
