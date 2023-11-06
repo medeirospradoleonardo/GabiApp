@@ -1,5 +1,4 @@
-import styled from 'styled-components';
-import {View} from 'react-native';
+import styled from 'styled-components/native';
 
 export const Container = styled.View`
   background-color: white;
@@ -8,8 +7,7 @@ export const Container = styled.View`
   /* height: 100px; */
   border-radius: 14px;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
-  /* margin-left: 20px; */
-  margin-top: 120px;
+  margin-bottom: 10px;
 `;
 
 export const Cover = styled.View`
@@ -40,8 +38,9 @@ export const Title = styled.Text`
 `;
 
 export const Content = styled.View`
-  padding-left: 20px;
+  /* padding-left: 20px; */
   flex-direction: row;
+  justify-content: center;
   align-items: center;
   height: 80px;
 `;

@@ -35,8 +35,9 @@ const Home = ({setTabTimer}: HomeProps) => {
       <Text>{locationNow?.speed}</Text>
       <Text>{locationNow?.time}</Text>
       <Text>{locationNow?.verticalAccuracy}</Text>
-      <Button title="Oi" onPress={setTabTimer} />
-      <Card />
+      <Button title="dada" onPress={setTabTimer} />
+      <Card localName="Auto Escola" localNumber={1} />
+      <Card localNumber={2} />
     </View>
   );
 };

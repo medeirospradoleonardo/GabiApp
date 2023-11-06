@@ -1,15 +1,23 @@
 import * as React from 'react';
 import {Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import {NavigationContainer, ParamListBase, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useState} from 'react';
 import Home from './screens/Home';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 
-const mapperRouteIcon = {
-  Home: 'home',
-  Timer: 'alarm',
+const mapperRouteIcon = (name: string) => {
+  switch (name) {
+    case 'Home':
+      return 'home';
+    case 'Calendar':
+      return 'calendar';
+    case 'Chat':
+      return 'chatbubble-ellipses';
+    default:
+      return 'home';
+  }
 };
 
 function Timer() {
@@ -22,6 +30,17 @@ function Timer() {
 
 const Tab = createBottomTabNavigator();
 
+function CustomIcon(color: string, size: number, route: RouteProp<ParamListBase, string>) {
+  return (
+    <Icon
+      name={mapperRouteIcon(route.name)}
+      size={size}
+      color={color}
+    />
+  );
+}
+
+
 function MyTabs() {
   const [tabTimer, setTabTimer] = useState(false);
 
@@ -29,15 +48,7 @@ function MyTabs() {
     <Tab.Navigator
       initialRouteName="Home"
       screenOptions={({route}) => ({
-        tabBarIcon: ({focused, color, size}) => {
-          return (
-            <Icon
-              name={mapperRouteIcon[route.name]}
-              size={size}
-              color={color}
-            />
-          );
-        },
+        tabBarIcon: ({color, size}) => CustomIcon(color, size, route),
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
@@ -49,13 +60,22 @@ function MyTabs() {
         }}
       />
       {tabTimer && (
-        <Tab.Screen
-          name="Timer"
-          component={Timer}
-          options={{
-            tabBarLabel: 'Timer',
-          }}
-        />
+        <>
+          <Tab.Screen
+            name="Chat"
+            component={Timer}
+            options={{
+              tabBarLabel: 'Chat',
+            }}
+          />
+          <Tab.Screen
+            name="Calendar"
+            component={Timer}
+            options={{
+              tabBarLabel: 'Calendar',
+            }}
+          />
+        </>
       )}
     </Tab.Navigator>
   );
