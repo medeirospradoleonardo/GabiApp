@@ -6,6 +6,7 @@ import {useState} from 'react';
 import Home from './screens/Home';
 
 import Icon from 'react-native-vector-icons/Ionicons';
+import Chat from './screens/Chat';
 
 const mapperRouteIcon = (name: string) => {
   switch (name) {
@@ -63,7 +64,7 @@ function MyTabs() {
         <>
           <Tab.Screen
             name="Chat"
-            component={Timer}
+            component={Chat}
             options={{
               tabBarLabel: 'Chat',
             }}
