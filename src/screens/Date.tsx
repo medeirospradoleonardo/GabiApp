@@ -39,14 +39,15 @@ const DateComponent = ({  }) => {
 
     return (
       <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <DateContainer
+        {datingDate ? (<DateContainer
         datingDate={datingDate}
         years={differenceDate && Math.floor((differenceDate / (1000 * 60 * 60 * 24 * 365))) || 0}
         days={differenceDate && Math.floor((differenceDate / (1000 * 60 * 60 * 24))) || 0}
         hours={differenceDate && Math.floor((differenceDate / (1000 * 60 * 60)) % 24) || 0}
         minutes={differenceDate && Math.floor((differenceDate / (1000 * 60)) % 60) || 0}
         seconds={differenceDate && (Math.round(differenceDate / 1000)) % 60 || 0}
-        />
+        />) : null}
+
     </View>
     );
 };

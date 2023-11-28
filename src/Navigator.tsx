@@ -8,16 +8,17 @@ import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from './screens/Chat';
 import Date from './screens/Date';
 
+
 const mapperRouteIcon = (name: string) => {
   switch (name) {
-    case 'Home':
-      return 'home';
+    case 'Locais 📍':
+      return 'location';
     case 'Data de namoro ❤️':
       return 'calendar';
     case 'Primeira conversa ❤️':
       return 'chatbubble-ellipses';
     default:
-      return 'home';
+      return 'location';
   }
 };
 
@@ -34,22 +35,22 @@ function CustomIcon(color: string, size: number, route: RouteProp<ParamListBase,
 }
 
 
-function MyTabs() {
+function Tabs() {
   const [tabTimer, setTabTimer] = useState(true);
 
   return (
     <Tab.Navigator
-      initialRouteName="Calendar"
+      initialRouteName="Primeira conversa ❤️"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => CustomIcon(color, size, route),
         tabBarActiveTintColor: 'tomato',
         tabBarInactiveTintColor: 'gray',
       })}>
       <Tab.Screen
-        name="Home"
+        name="Locais 📍"
         children={() => <Home setTabTimer={() => setTabTimer(!tabTimer)} />}
         options={{
-          tabBarLabel: 'Home',
+          tabBarLabel: 'Locais',
         }}
       />
       {tabTimer && (
@@ -77,7 +78,7 @@ function MyTabs() {
 export default function Navigator() {
   return (
     <NavigationContainer>
-      <MyTabs />
+      <Tabs />
     </NavigationContainer>
   );
 }

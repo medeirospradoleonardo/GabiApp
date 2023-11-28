@@ -1,12 +1,14 @@
 const background = require('../assets/background.png');
+const gabi = require('../assets/gabi.png');
 import {Image} from 'react-native';
 
 const BACKGROUND_IMAGE = Image.resolveAssetSource(background).uri;
+const GABI_IMAGE = Image.resolveAssetSource(gabi).uri;
 
 const userGabi = {
     _id: 2,
     name: 'Gabriela',
-    avatar: BACKGROUND_IMAGE,
+    avatar: GABI_IMAGE,
 };
 
 const userLeonardo = {
