@@ -1,5 +1,4 @@
 import * as React from 'react';
-import {Text, View} from 'react-native';
 import {NavigationContainer, ParamListBase, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useState} from 'react';
@@ -7,27 +6,20 @@ import Home from './screens/Home';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from './screens/Chat';
+import Date from './screens/Date';
 
 const mapperRouteIcon = (name: string) => {
   switch (name) {
     case 'Home':
       return 'home';
-    case 'Calendar':
+    case 'Data de namoro ❤️':
       return 'calendar';
-    case 'Chat':
+    case 'Primeira conversa ❤️':
       return 'chatbubble-ellipses';
     default:
       return 'home';
   }
 };
-
-function Timer() {
-  return (
-    <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-      <Text>Timer!</Text>
-    </View>
-  );
-}
 
 const Tab = createBottomTabNavigator();
 
@@ -43,11 +35,11 @@ function CustomIcon(color: string, size: number, route: RouteProp<ParamListBase,
 
 
 function MyTabs() {
-  const [tabTimer, setTabTimer] = useState(false);
+  const [tabTimer, setTabTimer] = useState(true);
 
   return (
     <Tab.Navigator
-      initialRouteName="Home"
+      initialRouteName="Calendar"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => CustomIcon(color, size, route),
         tabBarActiveTintColor: 'tomato',
@@ -63,17 +55,17 @@ function MyTabs() {
       {tabTimer && (
         <>
           <Tab.Screen
-            name="Chat"
+            name="Primeira conversa ❤️"
             component={Chat}
             options={{
-              tabBarLabel: 'Chat',
+              tabBarLabel: 'Primeira conversa',
             }}
           />
           <Tab.Screen
-            name="Calendar"
-            component={Timer}
+            name="Data de namoro ❤️"
+            component={Date}
             options={{
-              tabBarLabel: 'Calendar',
+              tabBarLabel: 'Data de namoro',
             }}
           />
         </>
