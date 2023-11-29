@@ -29,9 +29,6 @@ const DateComponent = ({  }) => {
         const dDate = await getData('datingDate');
         dDate && setDifferenceDate(new Date().getTime() - dDate?.getTime());
         dDate && setDatingDate(dDate);
-        // datingDate && console.log(new Date());
-        // datingDate && console.log(new Date().getTime() - datingDate?.getTime());
-        // datingDate && console.log((new Date().getTime() - datingDate?.getTime()) % 60);
       }, 1000);
 
 

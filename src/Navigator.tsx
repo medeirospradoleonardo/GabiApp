@@ -40,7 +40,7 @@ function Tabs() {
 
   return (
     <Tab.Navigator
-      initialRouteName="Primeira conversa ❤️"
+      initialRouteName="Locais 📍"
       screenOptions={({route}) => ({
         tabBarIcon: ({color, size}) => CustomIcon(color, size, route),
         tabBarActiveTintColor: 'tomato',
