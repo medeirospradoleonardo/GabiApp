@@ -1,32 +1,25 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text} from 'react-native';
+import { View, Text, ActivityIndicator} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import DateContainer from '../components/DateContainer';
+import { getData } from '../Navigator';
 
 const DateComponent = ({  }) => {
   const [datingDate, setDatingDate] = useState < Date | null >(null);
   const [differenceDate, setDifferenceDate] = useState<number | null>(null);
 
-  const getData = async (key: string) => {
-    try {
-      const value = await AsyncStorage.getItem(key);
-      if (value !== null) {
-        // value previously stored
-        // console.log('Valor encontrado ' + value);
-        return new Date(value.replaceAll('\"', ''));
-      }
-      return null;
-    } catch (e) {
-      // error reading value
-      return null;
-    }
-  };
+
 
 
   useEffect(() => {
 
       setInterval(async () => {
-        const dDate = await getData('datingDate');
+        const dDateString = await getData('datingDate');
+        console.log(dDateString);
+        let dDate = null;
+        if (dDateString){
+          dDate = new Date(dDateString.replaceAll('\"', ''));
+        }
         dDate && setDifferenceDate(new Date().getTime() - dDate?.getTime());
         dDate && setDatingDate(dDate);
       }, 1000);
@@ -43,7 +36,7 @@ const DateComponent = ({  }) => {
         hours={differenceDate && Math.floor((differenceDate / (1000 * 60 * 60)) % 24) || 0}
         minutes={differenceDate && Math.floor((differenceDate / (1000 * 60)) % 60) || 0}
         seconds={differenceDate && (Math.round(differenceDate / 1000)) % 60 || 0}
-        />) : null}
+        />) : <ActivityIndicator size="large" style={{ transform: [{ scaleX: 2 }, { scaleY: 2 }] }} color="tomato" />}
 
     </View>
     );

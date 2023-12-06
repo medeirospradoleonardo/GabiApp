@@ -1,12 +1,13 @@
 import * as React from 'react';
 import {NavigationContainer, ParamListBase, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import Home from './screens/Home';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from './screens/Chat';
 import Date from './screens/Date';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
 const mapperRouteIcon = (name: string) => {
@@ -34,9 +35,33 @@ function CustomIcon(color: string, size: number, route: RouteProp<ParamListBase,
   );
 }
 
+export const getData = async (key: string) => {
+  try {
+    const value = await AsyncStorage.getItem(key);
+    if (value !== null) {
+      return value;
+    }
+    return null;
+  } catch (e) {
+    return null;
+  }
+};
+
 
 function Tabs() {
-  const [tabTimer, setTabTimer] = useState(true);
+  const [othersTabs, setOtherTabs] = useState(false);
+
+  useEffect(() => {
+
+    const asyncFunction = async () => {
+      const localApartamento = await getData('apartamento');
+      localApartamento === 'true' && setOtherTabs(true);
+    };
+
+    asyncFunction();
+
+
+  }, []);
 
   return (
     <Tab.Navigator
@@ -48,12 +73,12 @@ function Tabs() {
       })}>
       <Tab.Screen
         name="Locais 📍"
-        children={() => <Home setTabTimer={() => setTabTimer(!tabTimer)} />}
+        children={() => <Home setOtherTabs={() => setOtherTabs(true)} />}
         options={{
           tabBarLabel: 'Locais',
         }}
       />
-      {tabTimer && (
+      {othersTabs && (
         <>
           <Tab.Screen
             name="Primeira conversa ❤️"

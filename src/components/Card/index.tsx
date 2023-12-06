@@ -2,25 +2,40 @@ import React from 'react';
 import * as S from './styles';
 
 const background = require('../../assets/background.png');
-import {Image} from 'react-native';
+import { Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-const BACKGROUND_IMAGE = Image.resolveAssetSource(background).uri;
-
 type CardProps = {
-  localNumber?: number;
   localName?: string;
+  uri: string
 };
 
-const Card = ({localName, localNumber}: CardProps) => {
-  return (
+const getLocalNumber = (localName: string | undefined) => {
+  switch (localName) {
+    case 'Autoescola':
+      return 'Local 1';
+    case 'DBB':
+      return 'Local 2';
+    case 'Praça':
+      return 'Local 3';
+    case 'Jeronimo':
+      return 'Local 4';
+    case 'Apartamento':
+      return 'Local 5';
+    default:
+      return localName;
+  }
+};
+
+const Card = ({ localName, uri }: CardProps) => {
+  return (<>
+    <S.Title>{getLocalNumber(localName)}</S.Title>
     <S.Container>
       <S.Cover>
-        <S.Image source={{uri: BACKGROUND_IMAGE}} />
-        <S.Title>{`Local ${localNumber}`}</S.Title>
+        <S.Image source={{ uri: uri }} />
       </S.Cover>
       <S.Content>
-        {localName ? (
+        {getLocalNumber(localName) != localName ? (
           <>
             <Icon name="check" size={30} color="#21ee21" />
             <S.Caption>{localName}</S.Caption>
@@ -33,6 +48,7 @@ const Card = ({localName, localNumber}: CardProps) => {
         )}
       </S.Content>
     </S.Container>
+  </>
   );
 };
 

@@ -1,19 +1,23 @@
 import styled from 'styled-components/native';
 
 export const Container = styled.View`
-  background-color: white;
-  width: 240px;
+  /* width: 240px; */
   /* width: 180px; */
   /* height: 100px; */
-  border-radius: 14px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  background: #e1e1e1;
+  /* background-color: tomato; */
+  /* width: 600px; */
   margin-bottom: 10px;
+  border-radius: 5px;
+  border-bottom: 1px solid rgb(178, 185, 197);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  margin-right: 20px;
 `;
 
 export const Cover = styled.View`
   width: 100%;
   /* height: 130px; */
-  height: 80px;
+  height: 110px;
   border-top-left-radius: 14px;
   border-top-right-radius: 14px;
   overflow: hidden;
@@ -29,12 +33,12 @@ export const Image = styled.Image`
 `;
 
 export const Title = styled.Text`
-  color: white;
+  color: black;
   font-size: 24px;
   font-weight: bold;
   width: 170px;
   margin-top: 20px;
-  margin-left: 20px;
+  /* margin-left: 20px; */
 `;
 
 export const Content = styled.View`
