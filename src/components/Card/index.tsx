@@ -1,13 +1,16 @@
 import React from 'react';
 import * as S from './styles';
 
-const background = require('../../assets/background.png');
-import { Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { Image } from 'react-native';
+
+const toVerify = require('../../assets/background2.png');
+const TOVERIFY_IMAGE = Image.resolveAssetSource(toVerify).uri;
 
 type CardProps = {
   localName?: string;
   uri: string
+  toVerified: boolean
 };
 
 const getLocalNumber = (localName: string | undefined) => {
@@ -27,22 +30,27 @@ const getLocalNumber = (localName: string | undefined) => {
   }
 };
 
-const Card = ({ localName, uri }: CardProps) => {
+const Card = ({ localName, uri, toVerified }: CardProps) => {
   return (<>
     <S.Title>{getLocalNumber(localName)}</S.Title>
     <S.Container>
       <S.Cover>
-        <S.Image source={{ uri: uri }} />
+        <S.Image source={{ uri: toVerified ? TOVERIFY_IMAGE : uri }} />
       </S.Cover>
       <S.Content>
-        {getLocalNumber(localName) != localName ? (
+        {getLocalNumber(localName) !== localName ? (
           <>
             <Icon name="check" size={30} color="#21ee21" />
             <S.Caption>{localName}</S.Caption>
           </>
+        ) : toVerified ? (
+          <>
+            <Icon name="map-marker" size={30} color="#9b9b9b" />
+            <S.Caption>Verificar local</S.Caption>
+          </>
         ) : (
           <>
-            <Icon name="lock" size={30} color="#000000" />
+            <Icon name="lock" size={30} color="#9b9b9b" />
             <S.Caption>Bloqueado</S.Caption>
           </>
         )}

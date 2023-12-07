@@ -15,7 +15,6 @@ const DateComponent = ({  }) => {
 
       setInterval(async () => {
         const dDateString = await getData('datingDate');
-        console.log(dDateString);
         let dDate = null;
         if (dDateString){
           dDate = new Date(dDateString.replaceAll('\"', ''));

@@ -235,6 +235,7 @@ import {
   Image,
   FlatListProps,
   Button,
+  ActivityIndicator,
 } from 'react-native';
 import Timeline, { Data } from 'react-native-timeline-flatlist';
 import { getData } from '../Navigator';
@@ -251,11 +252,10 @@ const JERONIMO_IMAGE = Image.resolveAssetSource(jeronimoUrl).uri;
 const apartamentoUrl = require('../assets/apartamento.png');
 const APARTAMENTO_IMAGE = Image.resolveAssetSource(apartamentoUrl).uri;
 
-const locked = require('../assets/background.png');
+const locked = require('../assets/background3.png');
 const LOCKED_IMAGE = Image.resolveAssetSource(locked).uri;
 
 import Card from '../components/Card';
-import Icon from 'react-native-vector-icons/Ionicons';
 
 type RowData = {
   description: string
@@ -294,6 +294,9 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     apartamento: false,
   });
 
+  const [indexLocalToVerify, setIndexLocalToVerify] = useState(0);
+  const [loading, setLoading] = useState(true);
+
   const locals = [
     {
       time: '1º Encontro',
@@ -307,73 +310,86 @@ const Home = ({ setOtherTabs }: HomeProps) => {
       circleColor: localsVerified.autoEscola ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.autoEscola ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.autoEscola ? AUTO_ESCOLA_IMAGE : LOCKED_IMAGE,
+      isVerify: indexLocalToVerify === 0,
     },
     {
       time: '1º Encontro',
       title: localsVerified.dbb ? 'DBB' : 'Local 2',
       description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
-      // icon: <Icon
-      //   name="location"
-      //   size={20}
-      //   color={localsVerified.dbb ? 'tomato' : '#9b9b9b'}
-      // />,
       lineColor: localsVerified.dbb ? 'tomato' : '#9b9b9b',
       circleColor: localsVerified.dbb ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.dbb ? DBB_IMAGE : LOCKED_IMAGE,
+      isVerify: indexLocalToVerify === 1,
     },
     {
       time: '1º Encontro',
       title: localsVerified.praca ? 'Praça' : 'Local 3',
       description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
-      // icon: <Icon
-      //   name="location"
-      //   size={20}
-      //   color={localsVerified.praca ? 'tomato' : '#9b9b9b'}
-      // />,
       circleColor: localsVerified.praca ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.praca ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.praca ? PRACA_IMAGE : LOCKED_IMAGE,
+      isVerify: indexLocalToVerify === 2,
     },
     {
       time: '2º Encontro',
       title: localsVerified.jeronimo ? 'Jeronimo' : 'Local 4',
       description: 'Team sport played between two teams of eleven players with a spherical ball. ',
-      // icon: <Icon
-      //   name="location"
-      //   size={20}
-      //   color={localsVerified.jeronimo ? 'tomato' : '#9b9b9b'}
-      // />,
       circleColor: localsVerified.jeronimo ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.jeronimo ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.jeronimo ? JERONIMO_IMAGE : LOCKED_IMAGE,
+      isVerify: indexLocalToVerify === 3,
     },
     {
       time: '3º Encontro',
       title: localsVerified.apartamento ? 'Apartamento' : 'Local 5',
       description: 'Look out for the Best Gym & Fitness Centers around me :)',
-      // icon: <Icon
-      //   name="location"
-      //   size={20}
-      //   color={localsVerified.apartamento ? 'tomato' : '#9b9b9b'}
-      // />,
       circleColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.apartamento ? APARTAMENTO_IMAGE : LOCKED_IMAGE,
+      isVerify: indexLocalToVerify === 4,
     },
   ];
 
+  const getIndexLocalToVerify = (localStatus: Boolean[]) => {
+    return localStatus.findIndex((element) => element === false);
+  };
+
+  useEffect(() => {
+
+    const asyncFunction = async () => {
+      const localAutoEscola = await getData('autoEscola');
+      const localDbb = await getData('dbb');
+      const localPraca = await getData('praca');
+      const localjeronimo = await getData('jeronimo');
+      const localApartamento = await getData('apartamento');
+      setLocalVerified({
+        autoEscola: localAutoEscola === 'true',
+        dbb: localDbb === 'true',
+        praca: localPraca === 'true',
+        jeronimo: localjeronimo === 'true',
+        apartamento: localApartamento === 'true',
+      });
+      setIndexLocalToVerify(getIndexLocalToVerify([localAutoEscola === 'true', localDbb === 'true', localPraca === 'true', localjeronimo === 'true', localApartamento === 'true']));
+      setLoading(false);
+    };
+    asyncFunction();
+  }, []);
+
 
   type Local = {
-    meeting: string
-    description: string
     time: string
+    description: string
+    circleColor: string
     title: string
-    icon: string
     lineColor: string
     imageUrl: string
+    isVerify: boolean
   }
 
-  const onEventPress = (data: Local) => {
+  const onEventPress = async (data: Local) => {
+    if (!data.isVerify) {
+      return;
+    }
     let title = data.title;
     switch (data.title) {
       case 'Local 1':
@@ -394,7 +410,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
       default:
         break;
     }
-    attLocal(selectorLocal(title), !localsVerified[selectorLocal(title)]);
+    await attLocal(selectorLocal(title), !localsVerified[selectorLocal(title)]);
     // setSelected(data);
   };
 
@@ -403,15 +419,35 @@ const Home = ({ setOtherTabs }: HomeProps) => {
   //       {return <Text style={{marginTop:10}}>Selected event: {selected.title} at {selected.time}</Text>;}
   // };
 
+  const storeData = async (field: string, value: Date | boolean) => {
+    try {
+      const jsonValue = JSON.stringify(value);
+      await AsyncStorage.setItem(field, jsonValue);
+    } catch (e) {
+      // saving error
+    }
+  };
 
 
-  const attLocal = (field: string, value: boolean) => {
+
+  const attLocal = async (field: string, value: boolean) => {
+    // Fazer a insercao do valor na memoria
+    await storeData(field, value);
+
+    // Se for o ultimo, fazer a liberacao das abas
+    if (field === 'apartamento'){
+      storeData('datingDate', new Date());
+      setOtherTabs();
+    }
+
+    const obj = { ...localsVerified, [field]: value };
+    setIndexLocalToVerify(getIndexLocalToVerify(Object.values(obj)));
     setLocalVerified((s) => ({ ...s, [field]: value }));
   };
 
 
 
-  const renderDetail = (rowData: Local, sectionID: string, rowID: string) => {
+  const renderDetail = (rowData: Local, index: number) => {
     let title = <Text style={[styles.title]}>{rowData.title}</Text>;
     var desc = null;
     if (rowData.description && rowData.imageUrl) {
@@ -424,37 +460,9 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     }
 
     return (
-      <Card localName={rowData.title} uri={rowData.imageUrl} />
+      <Card localName={rowData.title} uri={rowData.imageUrl} toVerified={rowData.isVerify} />
     );
   };
-
-  const storeData = async (value: Date) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem('datingDate', jsonValue);
-    } catch (e) {
-      // saving error
-    }
-  };
-
-  useEffect(() => {
-
-    const asyncFunction = async () => {
-      const localAutoEscola = await getData('autoEscola');
-      const localDbb = await getData('dbb');
-      const localPraca = await getData('praca');
-      const localjeronimo = await getData('jeronimo');
-      const localApartamento = await getData('apartamento');
-      setLocalVerified({
-        autoEscola: localAutoEscola === 'true',
-        dbb: localDbb === 'true',
-        praca: localPraca === 'true',
-        jeronimo: localjeronimo === 'true',
-        apartamento: localApartamento === 'true',
-      });
-    };
-    asyncFunction();
-  }, []);
 
   return (
     <View style={styles.container}>
@@ -465,21 +473,29 @@ const Home = ({ setOtherTabs }: HomeProps) => {
         await AsyncStorage.setItem('autoEscola', jsonValue);
         // setOtherTabs();
       }} /> */}
-      <Timeline
-        style={styles.list}
-        data={locals}
-        circleSize={20}
-        timeStyle={{ textAlign: 'center', backgroundColor: 'tomato', color: 'white', padding: 5, borderRadius: 13 }}
-        // showTime={false} // tirando o time
-        descriptionStyle={{ color: 'gray' }}
-        options={{
-          style: { paddingTop: 5 },
-        }}
-        // innerCircle={'icon'}
-        onEventPress={onEventPress}
-        renderDetail={renderDetail}
-        innerCircle={'dot'}
-      />
+      {loading ?
+        (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" style={{ transform: [{ scaleX: 3 }, { scaleY: 3 }] }} color="tomato" />
+          </View>
+        ) :
+        (<Timeline
+          style={styles.list}
+          data={locals}
+          circleSize={20}
+          timeStyle={{ textAlign: 'center', backgroundColor: 'tomato', color: 'white', padding: 5, borderRadius: 13 }}
+          // showTime={false} // tirando o time
+          descriptionStyle={{ color: 'gray' }}
+          options={{
+            style: { paddingTop: 5 },
+          }}
+          // innerCircle={'icon'}
+          onEventPress={onEventPress}
+          renderDetail={renderDetail}
+          innerCircle={'dot'}
+        />)
+      }
+
     </View>
   );
 

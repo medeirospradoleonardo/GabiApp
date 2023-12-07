@@ -24,10 +24,6 @@ const Chat = ({  }) => {
             locale="pt-br"
             dateFormat="llll"
             renderInputToolbar={() => null}
-            // renderMessage={(p) => {
-            //     // console.log(p.currentMessage?.user._id );
-            //     return null;
-            // }}
             renderBubble={(props) => {
                 return (<Bubble
                     {...props}
