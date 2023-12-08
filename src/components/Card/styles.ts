@@ -11,6 +11,7 @@ export const Container = styled.View`
   border-radius: 5px;
   border-bottom: 1px solid rgb(178, 185, 197);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  border-radius: 14px;
   margin-right: 20px;
 `;
 

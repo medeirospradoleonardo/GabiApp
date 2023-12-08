@@ -233,13 +233,17 @@ import {
   Text,
   View,
   Image,
-  FlatListProps,
   Button,
+  FlatListProps,
   ActivityIndicator,
 } from 'react-native';
 import Timeline, { Data } from 'react-native-timeline-flatlist';
 import { getData } from '../Navigator';
 
+import ButtonMinimal from '../components/ButtonMinimal';
+
+
+import Modal from 'react-native-modal';
 
 const autoEscolaUrl = require('../assets/autoEscola.jpg');
 const AUTO_ESCOLA_IMAGE = Image.resolveAssetSource(autoEscolaUrl).uri;
@@ -256,6 +260,7 @@ const locked = require('../assets/background3.png');
 const LOCKED_IMAGE = Image.resolveAssetSource(locked).uri;
 
 import Card from '../components/Card';
+import { ALERT_TYPE, AlertNotificationRoot, Dialog, Toast } from 'react-native-alert-notification';
 
 type RowData = {
   description: string
@@ -266,18 +271,29 @@ const selectorLocal = (local: string) => {
   switch (local) {
     case 'Autoescola':
       return 'autoEscola';
+    case 'Local 1':
+      return 'autoEscola';
     case 'DBB':
+      return 'dbb';
+    case 'Local 2':
       return 'dbb';
     case 'Praça':
       return 'praca';
+    case 'Local 3':
+      return 'praca';
     case 'Jeronimo':
       return 'jeronimo';
+    case 'Local 4':
+      return 'jeronimo';
     case 'Apartamento':
+      return 'apartamento';
+    case 'Local 5':
       return 'apartamento';
     default:
       return 'autoEscola';
   }
 };
+
 
 type HomeProps = {
   setOtherTabs: () => void
@@ -286,6 +302,7 @@ type HomeProps = {
 
 const Home = ({ setOtherTabs }: HomeProps) => {
   // const [selected, setSelected] = useState();
+  const [modalIsVisible, setModalIsVisible] = useState(true);
   const [localsVerified, setLocalVerified] = useState({
     autoEscola: false,
     dbb: false,
@@ -301,7 +318,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '1º Encontro',
       title: localsVerified.autoEscola ? 'Autoescola' : 'Local 1',
-      description: 'The Beginner Archery and Beginner Crossbow course does not require you to bring any equipment, since everything you need will be provided for the course. ',
+      description: '🙋‍♀️🙋‍♂️Lugar em que a gente se viu pessoalmente pela primeira vez.',
       // icon: <Icon
       //   name="location"
       //   size={20}
@@ -315,7 +332,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '1º Encontro',
       title: localsVerified.dbb ? 'DBB' : 'Local 2',
-      description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
+      description: '👫 Lugar em que a gente teve nossa primeira conversa cara a cara.',
       lineColor: localsVerified.dbb ? 'tomato' : '#9b9b9b',
       circleColor: localsVerified.dbb ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.dbb ? DBB_IMAGE : LOCKED_IMAGE,
@@ -324,7 +341,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '1º Encontro',
       title: localsVerified.praca ? 'Praça' : 'Local 3',
-      description: 'Badminton is a racquet sport played using racquets to hit a shuttlecock across a net.',
+      description: '👩‍❤️‍💋‍👨 Lugar em que a gente teve nosso primeiro beijo.',
       circleColor: localsVerified.praca ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.praca ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.praca ? PRACA_IMAGE : LOCKED_IMAGE,
@@ -333,7 +350,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '2º Encontro',
       title: localsVerified.jeronimo ? 'Jeronimo' : 'Local 4',
-      description: 'Team sport played between two teams of eleven players with a spherical ball. ',
+      description: '🤦‍♂️Lugar onde a gente teve uma conversa séria.',
       circleColor: localsVerified.jeronimo ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.jeronimo ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.jeronimo ? JERONIMO_IMAGE : LOCKED_IMAGE,
@@ -342,7 +359,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '3º Encontro',
       title: localsVerified.apartamento ? 'Apartamento' : 'Local 5',
-      description: 'Look out for the Best Gym & Fitness Centers around me :)',
+      description: '😁 Esse daqui é comigo.',
       circleColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.apartamento ? APARTAMENTO_IMAGE : LOCKED_IMAGE,
@@ -386,38 +403,31 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     isVerify: boolean
   }
 
-  const onEventPress = async (data: Local) => {
+  const attLocal = async (field: string, value: boolean) => {
+    // Fazer a insercao do valor na memoria
+    await storeData(field, value);
+    // Se for o ultimo, fazer a liberacao das abas
+    if (field === 'apartamento') {
+      await storeData('datingDate', new Date());
+      setOtherTabs();
+    }
+
+    const obj = { ...localsVerified, [field]: value };
+    setIndexLocalToVerify(getIndexLocalToVerify(Object.values(obj)));
+    setLocalVerified((s) => ({ ...s, [field]: value }));
+  };
+
+  const onEventPress = async (data: any) => {
     if (!data.isVerify) {
       return;
     }
-    let title = data.title;
-    switch (data.title) {
-      case 'Local 1':
-        title = 'Autoescola';
-        break;
-      case 'Local 2':
-        title = 'DBB';
-        break;
-      case 'Local 3':
-        title = 'Praça';
-        break;
-      case 'Local 4':
-        title = 'Jeronimo';
-        break;
-      case 'Local 5':
-        title = 'Apartamento';
-        break;
-      default:
-        break;
-    }
-    await attLocal(selectorLocal(title), !localsVerified[selectorLocal(title)]);
-    // setSelected(data);
+
+
+    setModalIsVisible(true);
+    //  Chama o processo de atualizar
+    // await attLocal(selectorLocal(title), !localsVerified[selectorLocal(title)]);
   };
 
-  // const renderSelected = () => {
-  //     if (selected)
-  //       {return <Text style={{marginTop:10}}>Selected event: {selected.title} at {selected.time}</Text>;}
-  // };
 
   const storeData = async (field: string, value: Date | boolean) => {
     try {
@@ -427,25 +437,6 @@ const Home = ({ setOtherTabs }: HomeProps) => {
       // saving error
     }
   };
-
-
-
-  const attLocal = async (field: string, value: boolean) => {
-    // Fazer a insercao do valor na memoria
-    await storeData(field, value);
-
-    // Se for o ultimo, fazer a liberacao das abas
-    if (field === 'apartamento'){
-      storeData('datingDate', new Date());
-      setOtherTabs();
-    }
-
-    const obj = { ...localsVerified, [field]: value };
-    setIndexLocalToVerify(getIndexLocalToVerify(Object.values(obj)));
-    setLocalVerified((s) => ({ ...s, [field]: value }));
-  };
-
-
 
   const renderDetail = (rowData: Local, index: number) => {
     let title = <Text style={[styles.title]}>{rowData.title}</Text>;
@@ -465,38 +456,94 @@ const Home = ({ setOtherTabs }: HomeProps) => {
   };
 
   return (
-    <View style={styles.container}>
-      {/* {renderSelected()} */}
-      {/* <Button title="Atualizar" color={'tomato'} onPress={async () => {
+    <>
+      <AlertNotificationRoot colors={[{
+        label: '#000000',
+        card: '#ffffff',
+        overlay: '#21ee21',
+        success: '#21ee21',
+        danger: '#e40e0e',
+        warning: '#d9ff00',
+      },
+      {
+        label: '#000000',
+        card: '#ffffff',
+        overlay: '#21ee21',
+        success: '#21ee21',
+        danger: '#e40e0e',
+        warning: '#d9ff00',
+      }]} >
+        <Modal isVisible={modalIsVisible} onBackdropPress={() => setModalIsVisible(false)}>
+          <View style={styles.modal}>
+            <View style={styles.tipContainer}>
+            <Text style={{ fontWeight: 'bold', fontSize: 20 }}>💡 Dica 💡</Text>
+              <View style={styles.tip}>
+                <Text style={{ fontWeight: 'bold' }}>{getIndexLocalToVerify(Object.values(localsVerified)) >= 0 && locals[getIndexLocalToVerify(Object.values(localsVerified))].description}</Text>
+              </View>
+            </View>
+            <View style={styles.modalRight}>
+              <ButtonMinimal title="Cancelar" onPress={() => {
+                setModalIsVisible(false);
+
+
+              }} />
+              {/* <Button title="Cancelar" onPress={() => setModalIsVisible(false)}/> */}
+              <View style={{ width: 135, marginLeft: 5 }}>
+                <Button color="tomato" title="Verificar local" onPress={async () => {
+
+                  // Verifica
+
+                  // Alert de rejeicao
+                  // Dialog.show({
+                  //   type: ALERT_TYPE.DANGER,
+                  //   title: 'Localização incorreta!',
+                  // });
+
+
+
+                  // Atualiza
+                  await attLocal(selectorLocal(locals[getIndexLocalToVerify(Object.values(localsVerified))].title), true);
+                  setModalIsVisible(false);
+                  Dialog.show({
+                    type: ALERT_TYPE.SUCCESS,
+                    title: 'Localização correta!',
+                  });
+                }} />
+              </View>
+            </View>
+          </View>
+        </Modal>
+        <View style={styles.container}>
+          {/* {renderSelected()} */}
+          {/* <Button title="Atualizar" color={'tomato'} onPress={async () => {
         // storeData(new Date('2023-11-27T00:28:51.940Z'));
         const jsonValue = JSON.stringify(true);
         await AsyncStorage.setItem('autoEscola', jsonValue);
         // setOtherTabs();
       }} /> */}
-      {loading ?
-        (
-          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-            <ActivityIndicator size="large" style={{ transform: [{ scaleX: 3 }, { scaleY: 3 }] }} color="tomato" />
-          </View>
-        ) :
-        (<Timeline
-          style={styles.list}
-          data={locals}
-          circleSize={20}
-          timeStyle={{ textAlign: 'center', backgroundColor: 'tomato', color: 'white', padding: 5, borderRadius: 13 }}
-          // showTime={false} // tirando o time
-          descriptionStyle={{ color: 'gray' }}
-          options={{
-            style: { paddingTop: 5 },
-          }}
-          // innerCircle={'icon'}
-          onEventPress={onEventPress}
-          renderDetail={renderDetail}
-          innerCircle={'dot'}
-        />)
-      }
-
-    </View>
+          {loading ?
+            (
+              <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                <ActivityIndicator size="large" style={{ transform: [{ scaleX: 3 }, { scaleY: 3 }] }} color="tomato" />
+              </View>
+            ) :
+            (<Timeline
+              style={styles.list}
+              data={locals}
+              circleSize={20}
+              timeStyle={{ textAlign: 'center', backgroundColor: 'tomato', color: 'white', padding: 5, borderRadius: 13 }}
+              // showTime={false} // tirando o time
+              descriptionStyle={{ color: 'gray' }}
+              listViewStyle={{ paddingVertical: 15 }}
+              // innerCircle={'icon'}
+              onEventPress={(event) => onEventPress(event)}
+              renderDetail={renderDetail}
+              innerCircle={'dot'}
+            />)
+          }
+        </View>
+      </AlertNotificationRoot>
+    </>
   );
 
 };
@@ -506,11 +553,7 @@ export default Home;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // padding: 20,
     paddingLeft: 20,
-    paddingVertical: 5,
-    // paddingTop:65,
-    // backgroundColor:'white',
   },
   containerLocal: {
     flex: 1,
@@ -518,10 +561,11 @@ const styles = StyleSheet.create({
     borderRadius: 14,
     boxShadow: 1,
     marginBottom: 10,
+    paddingVertical: 5,
   },
   list: {
     flex: 1,
-    // marginTop: 20,
+
   },
   title: {
     fontSize: 16,
@@ -539,5 +583,38 @@ const styles = StyleSheet.create({
   textDescription: {
     marginLeft: 10,
     color: 'gray',
+  },
+  modal: {
+    // flex: 1,
+    // justifyContent: 'center',
+    // alignItems: 'center',
+    backgroundColor: '#FFF',
+    // height: '60%',
+
+    borderRadius: 14,
+  },
+  modalRight: {
+    // marginLeft: 'auto',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginBottom: 10,
+    // marginTop: 360,
+  },
+  tipContainer: {
+    display: 'flex',
+    // flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: 20,
+  },
+  tip: {
+    // width: '90%',
+    borderColor: '#000',
+    // borderBottomWidth: 2,
+    // borderWidth: 2,
+    marginTop: 20,
+    marginBottom: 30,
   },
 });
