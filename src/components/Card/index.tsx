@@ -2,7 +2,7 @@ import React from 'react';
 import * as S from './styles';
 
 import Icon from 'react-native-vector-icons/FontAwesome';
-import { Image } from 'react-native';
+import { Image, StyleSheet } from 'react-native';
 
 const toVerify = require('../../assets/background2.png');
 const TOVERIFY_IMAGE = Image.resolveAssetSource(toVerify).uri;
@@ -33,7 +33,7 @@ const getLocalNumber = (localName: string | undefined) => {
 const Card = ({ localName, uri, toVerified }: CardProps) => {
   return (<>
     <S.Title>{getLocalNumber(localName)}</S.Title>
-    <S.Container>
+    <S.Container style={styles.shadowProp}>
       <S.Cover>
         <S.Image source={{ uri: toVerified ? TOVERIFY_IMAGE : uri }} />
       </S.Cover>
@@ -46,7 +46,7 @@ const Card = ({ localName, uri, toVerified }: CardProps) => {
         ) : toVerified ? (
           <>
             <Icon name="map-marker" size={30} color="#9b9b9b" />
-            <S.Caption>Verificar local</S.Caption>
+            <S.Caption>Liberar local</S.Caption>
           </>
         ) : (
           <>
@@ -59,5 +59,15 @@ const Card = ({ localName, uri, toVerified }: CardProps) => {
   </>
   );
 };
+
+const styles = StyleSheet.create({
+  shadowProp: {
+    shadowColor: '#000000',
+    shadowOffset: { width: 0, height: 0 },
+    shadowOpacity: 0.7,
+    shadowRadius: 1,
+    elevation: 10,
+  },
+});
 
 export default Card;

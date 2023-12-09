@@ -7,7 +7,7 @@ export const Container = styled.View`
   background: #e1e1e1;
   /* background-color: tomato; */
   /* width: 600px; */
-  margin-bottom: 10px;
+  margin-bottom: 18px;
   border-radius: 5px;
   border-bottom: 1px solid rgb(178, 185, 197);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);

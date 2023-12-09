@@ -302,7 +302,7 @@ type HomeProps = {
 
 const Home = ({ setOtherTabs }: HomeProps) => {
   // const [selected, setSelected] = useState();
-  const [modalIsVisible, setModalIsVisible] = useState(true);
+  const [modalIsVisible, setModalIsVisible] = useState(false);
   const [localsVerified, setLocalVerified] = useState({
     autoEscola: false,
     dbb: false,
@@ -359,7 +359,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
     {
       time: '3º Encontro',
       title: localsVerified.apartamento ? 'Apartamento' : 'Local 5',
-      description: '😁 Esse daqui é comigo.',
+      description: '😁 Esse você já sabe.',
       circleColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.apartamento ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.apartamento ? APARTAMENTO_IMAGE : LOCKED_IMAGE,
@@ -489,7 +489,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
               }} />
               {/* <Button title="Cancelar" onPress={() => setModalIsVisible(false)}/> */}
               <View style={{ width: 135, marginLeft: 5 }}>
-                <Button color="tomato" title="Verificar local" onPress={async () => {
+                <Button color="tomato" title="Liberar local" onPress={async () => {
 
                   // Verifica
 
@@ -506,7 +506,7 @@ const Home = ({ setOtherTabs }: HomeProps) => {
                   setModalIsVisible(false);
                   Dialog.show({
                     type: ALERT_TYPE.SUCCESS,
-                    title: 'Localização correta!',
+                    title: 'Local liberado!',
                   });
                 }} />
               </View>
@@ -614,6 +614,7 @@ const styles = StyleSheet.create({
     borderColor: '#000',
     // borderBottomWidth: 2,
     // borderWidth: 2,
+    paddingHorizontal: 2,
     marginTop: 20,
     marginBottom: 30,
   },
