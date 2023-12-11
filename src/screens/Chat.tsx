@@ -17,16 +17,16 @@ const Chat = ({ }) => {
       messages={messages}
       showAvatarForEveryMessage={true}
       inverted={false}
-      // user={{
-      //   _id: 1,
-      //   name: 'Leonardo',
-      //   avatar: BACKGROUND_IMAGE,
-      // }}
       user={{
-        _id: 2,
-        name: 'Gabriela',
+        _id: 1,
+        name: 'Leonardo',
         avatar: BACKGROUND_IMAGE,
       }}
+      // user={{
+      //   _id: 2,
+      //   name: 'Gabriela',
+      //   avatar: BACKGROUND_IMAGE,
+      // }}
       locale="pt-br"
       dateFormat="llll"
       renderInputToolbar={() => null}
