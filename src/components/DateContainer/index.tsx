@@ -36,33 +36,33 @@ const DateContainer = ({ datingDate, years, days, hours, minutes, seconds }: Dat
 
     return (
       <>
-      <S.Description><Text style={{color: '#000', fontSize: 20 }}>Data de namoro 📅</Text></S.Description>
+      <S.Description><Text style={{color: '#FFF', fontSize: 20 }}>Data de namoro 📅</Text></S.Description>
       <S.Date><Text style={{color: '#FFF', fontSize: 30 }}>{formatDate(datingDate)}</Text></S.Date>
-      <S.Description><Text style={{color: '#000', fontSize: 20 }}>Contagem 🕗</Text></S.Description>
+      <S.Description><Text style={{color: '#FFF', fontSize: 20 }}>Contagem 🕗</Text></S.Description>
       <S.Container>
         <S.CardContainer>
         <S.Card><Text style={{color: '#FFF', fontSize: 30 }}>{padTo2Digits(years)}</Text></S.Card>
-        <S.CardLabel><Text style={{color: '#000', fontSize: 15 }}>Anos</Text></S.CardLabel>
+        <S.CardLabel><Text style={{color: '#FFF', fontSize: 15 }}>Anos</Text></S.CardLabel>
         </S.CardContainer>
 
         <S.CardContainer>
         <S.Card><Text style={{color: '#FFF', fontSize: 30 }}>{padTo2Digits(days)}</Text></S.Card>
-        <S.CardLabel><Text style={{color: '#000', fontSize: 15 }}>Dias</Text></S.CardLabel>
+        <S.CardLabel><Text style={{color: '#FFF', fontSize: 15 }}>Dias</Text></S.CardLabel>
         </S.CardContainer>
 
         <S.CardContainer>
         <S.Card><Text style={{color: '#FFF', fontSize: 30 }}>{padTo2Digits(hours)}</Text></S.Card>
-        <S.CardLabel><Text style={{color: '#000', fontSize: 15 }}>Horas</Text></S.CardLabel>
+        <S.CardLabel><Text style={{color: '#FFF', fontSize: 15 }}>Horas</Text></S.CardLabel>
         </S.CardContainer>
 
         <S.CardContainer>
         <S.Card><Text style={{color: '#FFF', fontSize: 30 }}>{padTo2Digits(minutes)}</Text></S.Card>
-        <S.CardLabel><Text style={{color: '#000', fontSize: 15 }}>Minutos</Text></S.CardLabel>
+        <S.CardLabel><Text style={{color: '#FFF', fontSize: 15 }}>Minutos</Text></S.CardLabel>
         </S.CardContainer>
         <S.CardContainer>
 
         <S.Card><Text style={{color: '#FFF', fontSize: 30 }}>{padTo2Digits(seconds)}</Text></S.Card>
-        <S.CardLabel><Text style={{color: '#000', fontSize: 15 }}>Segundos</Text></S.CardLabel>
+        <S.CardLabel><Text style={{color: '#FFF', fontSize: 15 }}>Segundos</Text></S.CardLabel>
         </S.CardContainer>
     </S.Container>
     </>

@@ -299,19 +299,29 @@ type HomeProps = {
   setOtherTabs: () => void
 }
 
+export const storeData = async (field: string, value: Date | boolean) => {
+  try {
+    const jsonValue = JSON.stringify(value);
+    await AsyncStorage.setItem(field, jsonValue);
+  } catch (e) {
+    // saving error
+  }
+};
+
 
 const Home = ({ setOtherTabs }: HomeProps) => {
   // const [selected, setSelected] = useState();
   const [modalIsVisible, setModalIsVisible] = useState(false);
+  const [modalTip, setModalTip] = useState('🙋‍♀️🙋‍♂️Lugar em que a gente se viu pessoalmente pela primeira vez.');
   const [localsVerified, setLocalVerified] = useState({
-    autoEscola: false,
-    dbb: false,
-    praca: false,
-    jeronimo: false,
-    apartamento: false,
+    autoEscola: true,
+    dbb: true,
+    praca: true,
+    jeronimo: true,
+    apartamento: true,
   });
 
-  const [indexLocalToVerify, setIndexLocalToVerify] = useState(0);
+  const [indexLocalToVerify, setIndexLocalToVerify] = useState(-1);
   const [loading, setLoading] = useState(true);
 
   const locals = [
@@ -319,11 +329,6 @@ const Home = ({ setOtherTabs }: HomeProps) => {
       time: '1º Encontro',
       title: localsVerified.autoEscola ? 'Autoescola' : 'Local 1',
       description: '🙋‍♀️🙋‍♂️Lugar em que a gente se viu pessoalmente pela primeira vez.',
-      // icon: <Icon
-      //   name="location"
-      //   size={20}
-      //   color={localsVerified.autoEscola ? 'tomato' : '#9b9b9b'}
-      // />,
       circleColor: localsVerified.autoEscola ? 'tomato' : '#9b9b9b',
       lineColor: localsVerified.autoEscola ? 'tomato' : '#9b9b9b',
       imageUrl: localsVerified.autoEscola ? AUTO_ESCOLA_IMAGE : LOCKED_IMAGE,
@@ -374,19 +379,19 @@ const Home = ({ setOtherTabs }: HomeProps) => {
   useEffect(() => {
 
     const asyncFunction = async () => {
-      const localAutoEscola = await getData('autoEscola');
-      const localDbb = await getData('dbb');
-      const localPraca = await getData('praca');
-      const localjeronimo = await getData('jeronimo');
-      const localApartamento = await getData('apartamento');
-      setLocalVerified({
-        autoEscola: localAutoEscola === 'true',
-        dbb: localDbb === 'true',
-        praca: localPraca === 'true',
-        jeronimo: localjeronimo === 'true',
-        apartamento: localApartamento === 'true',
-      });
-      setIndexLocalToVerify(getIndexLocalToVerify([localAutoEscola === 'true', localDbb === 'true', localPraca === 'true', localjeronimo === 'true', localApartamento === 'true']));
+      // const localAutoEscola = await getData('autoEscola');
+      // const localDbb = await getData('dbb');
+      // const localPraca = await getData('praca');
+      // const localjeronimo = await getData('jeronimo');
+      // const localApartamento = await getData('apartamento');
+      // setLocalVerified({
+      //   autoEscola: localAutoEscola === 'true',
+      //   dbb: localDbb === 'true',
+      //   praca: localPraca === 'true',
+      //   jeronimo: localjeronimo === 'true',
+      //   apartamento: localApartamento === 'true',
+      // });
+      // setIndexLocalToVerify(getIndexLocalToVerify([localAutoEscola === 'true', localDbb === 'true', localPraca === 'true', localjeronimo === 'true', localApartamento === 'true']));
       setLoading(false);
     };
     asyncFunction();
@@ -418,24 +423,14 @@ const Home = ({ setOtherTabs }: HomeProps) => {
   };
 
   const onEventPress = async (data: any) => {
-    if (!data.isVerify) {
-      return;
-    }
+    // if (!data.isVerify) {
+    //   return;
+    // }
 
-
+    setModalTip(data.description);
     setModalIsVisible(true);
     //  Chama o processo de atualizar
     // await attLocal(selectorLocal(title), !localsVerified[selectorLocal(title)]);
-  };
-
-
-  const storeData = async (field: string, value: Date | boolean) => {
-    try {
-      const jsonValue = JSON.stringify(value);
-      await AsyncStorage.setItem(field, jsonValue);
-    } catch (e) {
-      // saving error
-    }
   };
 
   const renderDetail = (rowData: Local, index: number) => {
@@ -478,18 +473,17 @@ const Home = ({ setOtherTabs }: HomeProps) => {
             <View style={styles.tipContainer}>
             <Text style={{ fontWeight: 'bold', fontSize: 20 }}>💡 Dica 💡</Text>
               <View style={styles.tip}>
-                <Text style={{ fontWeight: 'bold' }}>{getIndexLocalToVerify(Object.values(localsVerified)) >= 0 && locals[getIndexLocalToVerify(Object.values(localsVerified))].description}</Text>
+                {/* <Text style={{ fontWeight: 'bold' }}>{getIndexLocalToVerify(Object.values(localsVerified)) >= 0 && locals[getIndexLocalToVerify(Object.values(localsVerified))].description}</Text> */}
+                <Text style={{ fontWeight: 'bold' }}>{modalTip}</Text>
               </View>
             </View>
             <View style={styles.modalRight}>
               <ButtonMinimal title="Cancelar" onPress={() => {
                 setModalIsVisible(false);
-
-
               }} />
               {/* <Button title="Cancelar" onPress={() => setModalIsVisible(false)}/> */}
               <View style={{ width: 135, marginLeft: 5 }}>
-                <Button color="tomato" title="Liberar local" onPress={async () => {
+                <Button disabled color="tomato" title="Liberar local" onPress={async () => {
 
                   // Verifica
 
@@ -498,8 +492,6 @@ const Home = ({ setOtherTabs }: HomeProps) => {
                   //   type: ALERT_TYPE.DANGER,
                   //   title: 'Localização incorreta!',
                   // });
-
-
 
                   // Atualiza
                   await attLocal(selectorLocal(locals[getIndexLocalToVerify(Object.values(localsVerified))].title), true);

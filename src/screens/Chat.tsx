@@ -1,11 +1,12 @@
 import React, { useState } from 'react';
 
 
-const background = require('../assets/background.png');
 import { Image } from 'react-native';
 import Messages from '../assets/messages';
 
 import { Bubble, GiftedChat } from 'react-native-gifted-chat';
+
+const background = require('../assets/background.jpg');
 const BACKGROUND_IMAGE = Image.resolveAssetSource(background).uri;
 
 const Chat = ({ }) => {
@@ -16,9 +17,14 @@ const Chat = ({ }) => {
       messages={messages}
       showAvatarForEveryMessage={true}
       inverted={false}
+      // user={{
+      //   _id: 1,
+      //   name: 'Leonardo',
+      //   avatar: BACKGROUND_IMAGE,
+      // }}
       user={{
-        _id: 1,
-        name: 'Leonardo',
+        _id: 2,
+        name: 'Gabriela',
         avatar: BACKGROUND_IMAGE,
       }}
       locale="pt-br"

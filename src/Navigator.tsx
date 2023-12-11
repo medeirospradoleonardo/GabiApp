@@ -1,12 +1,14 @@
+process.env.TZ = 'America/Sao_Paulo';
+
 import * as React from 'react';
 import {NavigationContainer, ParamListBase, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {useEffect, useState} from 'react';
-import Home from './screens/Home';
+import Home, { storeData } from './screens/Home';
 
 import Icon from 'react-native-vector-icons/Ionicons';
 import Chat from './screens/Chat';
-import Date from './screens/Date';
+import DateScreen from './screens/Date';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -54,7 +56,22 @@ function Tabs() {
   useEffect(() => {
 
     const asyncFunction = async () => {
-      const localApartamento = await getData('apartamento');
+      const localAutoEscola = await getData('autoEscola');
+      const localDbb = await getData('dbb');
+      const localPraca = await getData('praca');
+      const localJeronimo = await getData('jeronimo');
+      let localApartamento = await getData('apartamento');
+      const datingDate = await getData('datingDate');
+
+      !localAutoEscola && await storeData('autoEscola', true);
+      !localDbb && await storeData('dbb', true);
+      !localPraca && await storeData('praca', true);
+      !localJeronimo && await storeData('jeronimo', true);
+      !localApartamento && await storeData('apartamento', true);
+      !datingDate && await storeData('datingDate', new Date('2023-12-09T16:50:00.000Z')); // eh 17:50, mas deixei pro calculo
+
+      localApartamento = await getData('apartamento');
+
       localApartamento === 'true' && setOtherTabs(true);
     };
 
@@ -89,7 +106,7 @@ function Tabs() {
           />
           <Tab.Screen
             name="Data de namoro ❤️"
-            component={Date}
+            component={DateScreen}
             options={{
               tabBarLabel: 'Data de namoro',
             }}

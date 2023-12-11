@@ -1,9 +1,9 @@
-const background = require('../assets/background.png');
 const gabi = require('../assets/gabi.png');
+const leo = require('../assets/leo.jpg');
 import {Image} from 'react-native';
 
-const BACKGROUND_IMAGE = Image.resolveAssetSource(background).uri;
 const GABI_IMAGE = Image.resolveAssetSource(gabi).uri;
+const LEO_IMAGE = Image.resolveAssetSource(leo).uri;
 
 const userGabi = {
     _id: 2,
@@ -14,7 +14,7 @@ const userGabi = {
 const userLeonardo = {
     _id: 1,
     name: 'Leonardo',
-    avatar: BACKGROUND_IMAGE,
+    avatar: LEO_IMAGE,
 };
 
 const Messages = [
