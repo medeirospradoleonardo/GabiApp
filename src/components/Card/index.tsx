@@ -4,7 +4,7 @@ import * as S from './styles';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Image, StyleSheet } from 'react-native';
 
-const toVerify = require('../../assets/background2.png');
+const toVerify = require('../../assets/heart.png');
 const TOVERIFY_IMAGE = Image.resolveAssetSource(toVerify).uri;
 
 type CardProps = {

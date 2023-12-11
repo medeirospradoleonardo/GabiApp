@@ -3,7 +3,7 @@ import { ActivityIndicator, ImageBackground, Image } from 'react-native';
 import DateContainer from '../components/DateContainer';
 import { getData } from '../Navigator';
 
-const background = require('../assets/background.jpg');
+const background = require('../assets/gabiAndLeo.jpg');
 const BACKGROUND_IMAGE = Image.resolveAssetSource(background).uri;
 
 const DateComponent = ({ }) => {

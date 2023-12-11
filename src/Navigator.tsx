@@ -1,5 +1,3 @@
-process.env.TZ = 'America/Sao_Paulo';
-
 import * as React from 'react';
 import {NavigationContainer, ParamListBase, RouteProp} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
